@@ -1,4 +1,4 @@
-def ejecutar = false
+def ejecutar = true
 pipeline {
     agent any
     stages { 
@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-        stage('No me ejecuto según condición') {
+        stage('Me ejecuto según condición') {
             when {
                 expression {
                     ejecutar == true
@@ -17,14 +17,12 @@ pipeline {
             steps {
                 echo 'Esta fase se ejecuta según un valor booleano'
                 script {
-                    //ejecutar = true.toBoolean()
                     ejecutar = !ejecutar
-                    print("Valor ejecutar:"+ejecutar)
                 }
                
             }
         }
-        stage('Me ejecuto según condición') {
+        stage('No me ejecuto según condición') {
             when {
                 expression {
                     ejecutar == true
