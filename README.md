@@ -14,7 +14,7 @@ El repositorio se organiza de la siguiente manera:
 
 1. Clona este repositorio en tu máquina local utilizando el siguiente comando:
 ```console
-git clone https://github.com/tu-usuario/nombre-repositorio.git
+git clone https://github.com/jacampano/cursoJenkins.git
 ```
 2. Explora las diferentes secciones del repositorio y navega por los archivos Jenkinsfiles proporcionados.
 
