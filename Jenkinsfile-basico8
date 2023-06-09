@@ -8,8 +8,14 @@ pipeline {
                 script {
                     def condicion 
 
-                    //condicion = input(id: 'condicionInput', message: '¿Se debe desplegar?', parameters: [booleanParam(name: 'condicion', defaultValue: false, description: 'Condición')])
-                    condicion = choice(name: 'seleccion', choices: ['Si', 'No'], description: 'Se debe desplegar?')
+                    condicion = input(
+                        id: 'condicionInput',
+                        message: 'Seleccione una opción',
+                        parameters: [
+                            choice(name: 'condicion', choices: ['Si', 'No'], description: 'Se debe desplegar?')
+                        ]
+                        )
+                    
                     if (condicion.equals('Si')) {
                         echo "Ejecuto acciones para desplegar"
                     } else {
