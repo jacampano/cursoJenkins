@@ -18,6 +18,7 @@ pipeline {
                     def mavenHome = tool name: mavenTool, type: 'maven'
                  
                     sh 'printenv'
+                    sh 'mvn -version'
                 }
             }
         }
