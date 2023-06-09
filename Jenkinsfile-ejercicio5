@@ -202,7 +202,7 @@ pipeline {
         stage('Deploy') {
             when {
                 expression {
-                   analizarConOWASP == true
+                   realizarDespliegue == true
                 }
             }
              steps {
