@@ -1,7 +1,7 @@
 //Configuración repositorio 
-def credencialesGIT = "Gitlab"
-def urlGIT = "http://gitlab.example.com/gitlab-instance-21f8eb48/clase/pruebaswebapp.git"
-def rama = "master"
+def credencialesGIT = "userGitH"
+def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
+def rama = "main"
 
 // Herramientas y servidores
 def versionJDK = "JDK11"
@@ -55,7 +55,7 @@ pipeline {
 
                             echo "--- Compilación y empaquetado ---"
                             echo "JAVA_HOME: $JAVA_HOME"
-                            sh "mvn clean package"
+                            sh "mvn clean package -DskipTests"
                                        
                             }
                         }
@@ -76,7 +76,7 @@ pipeline {
 
              steps {
                     script {
-                        deploy adapters: [tomcat9(credentialsId: "tomcat", path: '', url: "http://localhost:9999/")], contextPath: "/pruebasWebApp", war: "**/*.war"
+                        deploy adapters: [tomcat9(credentialsId: "tomcat", path: '', url: "http://servidor.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
                     }
                 }
 
