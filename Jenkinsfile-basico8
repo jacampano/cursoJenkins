@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    stages { 
+        stage('Estructuras de control (IF)') {
+            steps {
+                script {
+                    def condicion = false
+
+                    if (condicion) {
+                        echo "Ejecuto acciones cuando se cumplen"
+                    } else {
+                        echo "Ejecuto acciones cuando no se cumplen"
+                    }
+                }
+            }
+        }
+    }
+}
