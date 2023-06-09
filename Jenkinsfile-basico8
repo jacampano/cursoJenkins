@@ -4,7 +4,7 @@ pipeline {
         stage('Estructuras de control (IF)') {
             steps {
                 script {
-                    def condicion = false
+                    def condicion = false.toBoolean()
 
                     if (condicion) {
                         echo "Ejecuto acciones cuando se cumplen"
