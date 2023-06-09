@@ -1,5 +1,3 @@
-def entorno = "PRODUCCION"
-
 pipeline {
     agent any
     stages { 
@@ -29,6 +27,8 @@ pipeline {
             steps {
 
                 script {
+                    def entorno
+                    
                     entorno = input(
                         message: "Indique el entorno",
                         parameters: [string(name: 'entorno', defaultValue: 'PRODUCCION', description: 'Entorno donde se realizarán las acciones')]
@@ -52,5 +52,29 @@ pipeline {
                 }
             }
         }
-    }
+
+        stage ('Estructuras de control (FOR)') {
+            steps {
+                script {
+
+                    def servidores
+
+                    servidores = input(
+                        id: 'multiSelectInput',
+                        message: 'Seleccione los servidores donde realizar el despliegue',
+                        parameters: [
+                            multiSelect(name: 'selectedValues', choices: ['tomcat1', 'tomcat2', 'tomcat3'], description: 'Selecciones los servidores')
+                        ]
+                    )
+
+                    // Iterar por cada servicio seleccionado
+                    for (def servidor in servidores) {
+                        echo "Realizar despliegue en : ${servidor}"
+                        // Acciones que se realizarían para desplegar
+                        // ...
+
+                    }
+                }   
+            }
+        }
 }
