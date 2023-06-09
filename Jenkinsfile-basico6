@@ -16,7 +16,10 @@ pipeline {
             }
             steps {
                 echo 'Esta fase se ejecuta según un valor booleano'
-                ejecutar = true
+                script {
+                     ejecutar = true
+                }
+               
             }
         }
         stage('Me ejecuto según condición') {
