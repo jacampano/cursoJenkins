@@ -19,6 +19,7 @@ pipeline {
                 script {
                     //ejecutar = true.toBoolean()
                     ejecutar = !ejecutar
+                    print("Valor ejecutar:"+ejecutar)
                 }
                
             }
