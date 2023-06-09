@@ -17,7 +17,8 @@ pipeline {
             steps {
                 echo 'Esta fase se ejecuta según un valor booleano'
                 script {
-                    ejecutar = true.toBoolean()
+                    //ejecutar = true.toBoolean()
+                    ejecutar = !ejecutar
                 }
                
             }
