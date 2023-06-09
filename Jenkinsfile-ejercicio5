@@ -59,11 +59,10 @@ pipeline {
                     def properties = readProperties file: 'ci.properties'
                     print(properties)
                     realizarCompilacion = properties['realizarCompilacion'].toBoolean()
-                    print("Valor realizar compilación:"+realizarCompilacion)
-                    analizarConSonar = properties['analizarConSonar']
-                    analizarConOWASP = properties['analizarConOWASP']
-                    realizarPruebasUnitarias = properties['realizarPruebasUnitarias']
-                    realizarDespliegue = properties['realizarDespliegue']
+                    analizarConSonar = properties['analizarConSonar'].toBoolean()
+                    analizarConOWASP = properties['analizarConOWASP'].toBoolean()
+                    realizarPruebasUnitarias = properties['realizarPruebasUnitarias'].toBoolean()
+                    realizarDespliegue = properties['realizarDespliegue'].toBoolean()
                 }
             }
         }
