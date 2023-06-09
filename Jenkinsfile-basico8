@@ -28,7 +28,7 @@ pipeline {
 
                 script {
                     def entorno
-                    
+
                     entorno = input(
                         message: "Indique el entorno",
                         parameters: [string(name: 'entorno', defaultValue: 'PRODUCCION', description: 'Entorno donde se realizarán las acciones')]
@@ -77,4 +77,5 @@ pipeline {
                 }   
             }
         }
+    }
 }
