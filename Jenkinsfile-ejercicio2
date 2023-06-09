@@ -1,8 +1,9 @@
-/* Ejercicio 1 .
+/* Ejercicio 2 .
 Se implementará un pipeline que tenga las siguientes fases (stages):
 Inicialización
 Descarga código fuente
 Compilación y empaquetado
+Deploy (que realizará un despliegue en un Tomcat9)
 
 Las fases ya están creadas. Algunas tienen ya contenido agregado para ayudarte.
 
@@ -15,17 +16,18 @@ urlGIT -> URL al repositorio GIT que contendrá el proyecto a descargar y compil
 rama -> Rama que se utilizará
 versionJDK -> versión de JDK a utilizar 
 versionMaven -> versión de Maven a utilizar
+realizarCompilacion, valor booleano que indicará si debe ejecutarse la compilación.
+realizarDespliegue, valor booleano que indicará si debe ejecutarse el despliegue.
  
 */
 
-def credencialesGIT = "" 
-def urlGIT = "http://gitlab.example.com/gitlab-instance-21f8eb48/clase/pruebaswebapp.git"
-def rama = "master"
+def credencialesGIT = "tokenGitH" 
+def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
+def rama = "main"
 
 // Herramientas y servidores
 def versionJDK = "JDK11"
 def versionMaven = "Maven-3.8.6"
-
 
 def realizarCompilacion = true
 def realizarDespliegue = true
@@ -35,7 +37,7 @@ pipeline {
     agent any
           
     stages {
-        // Preparación tareas previas. Ejecución de tareas previas preparatorias de la ejecución de la Tubería.        
+        // Preparación tareas previas. Ejecución de tareas previas preparatorias de la ejecución del pipeline.        
         stage('Inicialización')
         {
             steps{
@@ -60,12 +62,8 @@ pipeline {
         }
         // Compilación y empaquetado
         stage('Compilación y empaquetado') {
-              when {
-                expression {
-                    realizarCompilacion == true
-                }
-            }
-          
+            //Ejecutar de forma condicional al valor de la variable realizarCompilacion
+         
                 steps {
                     script {
                         
@@ -87,15 +85,11 @@ pipeline {
 
         //Aqui nueva fase que realiza el despliegue de un WAR.
         stage('Deploy') {
-                when {
-                    expression {
-                        realizarDespliegue == true
-                    }
-                }
+             //Ejecutar de forma condicional al valor de la variable realizarDespliegue
 
              steps {
                     script {
-                        deploy adapters: [tomcat9(credentialsId: "tomcat", path: '', url: "http://localhost:9999/")], contextPath: "/pruebasWebApp", war: "**/*.war"
+                        echo "--- Realizar despliegue en TOMCAT9"
                     }
                 }
 

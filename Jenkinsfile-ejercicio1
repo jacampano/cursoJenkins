@@ -29,7 +29,7 @@ pipeline {
     agent any
           
     stages {
-        // Preparación tareas previas. Ejecución de tareas previas preparatorias de la ejecución de la Tubería.        
+        // Preparación tareas previas. Ejecución de tareas previas preparatorias de la ejecución dl pipeline.        
         stage('Inicialización')
         {
             steps{
