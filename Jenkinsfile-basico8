@@ -6,12 +6,14 @@ pipeline {
         stage('Estructuras de control (IF)') {
             steps {
                 script {
-                    def condicion = true
+                    def condicion 
+
+                    condicion = input(id: 'condicionInput', message: '¿Se debe desplegar?', parameters: [booleanParam(name: 'condicion', defaultValue: false, description: 'Condición')])
 
                     if (condicion) {
-                        echo "Ejecuto acciones cuando se cumplen"
+                        echo "Ejecuto acciones para desplegar"
                     } else {
-                        echo "Ejecuto acciones cuando no se cumplen"
+                        echo "Ejecuto acciones para no desplegar (puede ser establecer una condición para que no se ejecute siguiente fase)"
                     }
                 }
             }
