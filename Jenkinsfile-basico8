@@ -59,6 +59,7 @@ pipeline {
 
                     def servidores
 
+                    //ExtendedChoiceParameterDefinition: Se necesita instalar el plugin Extended Choice Parameter
                     servidores = input(
                         id: 'multiSelectInput',
                         message: 'Select multiple values',
