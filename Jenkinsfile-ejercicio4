@@ -1,7 +1,18 @@
+/*Ejercicio 4
+Se implementará un pipeline similar al del ejercicio3, pero en esta ocasión se utilizará una librería de funciones llamada "eslabones". Se utilizará la rama "main" de dicha libreria.
+Reemplaremos la implementación existentes en las siguientes fases, por las llamadas a funciones de dicha librería:
+    Descarga Código fuente -> ObtenerCodigoFuente(urlGit, rama, credencialesGIT)
+    Análisis estático de código -> AnalisisSonar(versionJDK)
+    Umbral de Calidad -> QualityGate()
+
+El repositorio del proyecto librería es: https://github.com/jacampano/libreria.git
+
+
+*/
 //Configuración repositorio 
-def credencialesGIT = "Gitlab"
-def urlGIT = ""
-def rama = ""
+def credencialesGIT = "userGitH"
+def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
+def rama = "main"
 
 
 // Herramientas y servidores
@@ -13,10 +24,11 @@ def sonarToken = "SonarToken"
 def instalacionSonar = "SonarLocal"
 
 //Condiciones ejecución fases --
+@Library('eslabones@main')
 def realizarCompilacion = true
 def analizarConSonar = true
 def analizarConOWASP = true
-def realizarPruebasUnitarias = false
+def realizarPruebasUnitarias = true
 def realizarDespliegue = true
 
 
@@ -30,7 +42,8 @@ pipeline {
         stage('Inicialización')
         {
             steps{
-
+               
+                info()
                 cleanWs()
                 script {
                     urlGIT=env.gitlabSourceRepoHttpUrl
@@ -41,13 +54,9 @@ pipeline {
 
         stage('Descarga código fuente') {
             steps {
-                
-                echo "--- Obtener Codigo Fuente desde rama:" + rama + "--"
-                checkout([$class: 'GitSCM',
-                       branches: [[name: "${rama}"]],
-                       doGenerateSubmoduleConfigurations: false,
-                       extensions: [], gitTool: 'git', submoduleCfg: [],
-                       userRemoteConfigs: [[credentialsId: "${credencialesGIT}", url: "${urlGIT}"]]])
+              
+                echo "--- Sustituir implementación utilizada hasta ahora por la llamada correspondiente en la librería ---"
+              
             }
                 
   
@@ -91,31 +100,13 @@ pipeline {
 
                     
                     steps {
-                       catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                       
-                        script {
-                            withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m","JAVA_HOME=${tool versionJDK}"]) {
-                                scannerHome = tool sonarScannerTool
+                        catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
 
-                                try {
-
-                                    withSonarQubeEnv(credentialsId: sonarToken, installationName: instalacionSonar) {
-                                    sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
-                                    }
-
-
-                                } catch (err) {
-                                    echo "Error ${err.toString()}"
-                                }
-                                }
-                            }
-                            }
-                    }
-               
+                            echo "--- Sustituir implementación utilizada hasta ahora por la llamada correspondiente en la librería ---"                    
                 
-                }  
-                
-                
+                        }
+                }
+                }
 
                 stage('Umbral de Calidad') {
 
@@ -128,19 +119,7 @@ pipeline {
                      steps {
                         catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                             script {
-                            try {
-                                sleep(10) 
-                                timeout(time: 1, unit: 'MINUTES') {
-                                    def qg = waitForQualityGate()
-                                    if (qg.status != 'OK') {
-                                        error "${qg.status}: No se ha superado el umbral requerido de calidad "
-                                    }
-
-                                 }
-
-                                } catch (err) {
-                                    echo err.toString()
-                                    }
+                                echo "--- Sustituir implementación utilizada hasta ahora por la llamada correspondiente en la librería ---"
                             }
                             
                         }
@@ -211,17 +190,18 @@ pipeline {
             }//Fin pruebas de componentes
         
 
- 
+       
+
         //Aqui nueva fase que realiza el despliegue de un WAR.
         stage('Deploy') {
             when {
                 expression {
-                realizarDespliegue == true
-                }
+                    analizarConOWASP == true
+                    }
             }
              steps {
                     script {
-                        deploy adapters: [tomcat9(credentialsId: "robot", path: '', url: "http://servidor.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
+                        deploy adapters: [tomcat8(credentialsId: "robot", path: '', url: "http://servidor.tomcat:9999/")], contextPath: "/pruebasWebApp", war: "**/*.war"
                     }
                 }
 
@@ -231,7 +211,7 @@ pipeline {
         
         post {
             success {
-                dependencyCheckPublisher failedNewCritical: 5, failedNewHigh: 15, failedNewLow: 30, failedNewMedium: 15, failedTotalCritical: 10, failedTotalHigh: 30, failedTotalLow: 60, failedTotalMedium: 30, pattern: '**/dependency-check-report.xml', unstableNewCritical: 3, unstableNewHigh: 5, unstableNewLow: 25, unstableNewMedium: 15, unstableTotalCritical: 5, unstableTotalHigh: 20, unstableTotalLow: 50, unstableTotalMedium: 20
+                //dependencyCheckPublisher failedNewCritical: 5, failedNewHigh: 15, failedNewLow: 30, failedNewMedium: 15, failedTotalCritical: 10, failedTotalHigh: 30, failedTotalLow: 60, failedTotalMedium: 30, pattern: '**/dependency-check-report.xml', unstableNewCritical: 3, unstableNewHigh: 5, unstableNewLow: 25, unstableNewMedium: 15, unstableTotalCritical: 5, unstableTotalHigh: 20, unstableTotalLow: 50, unstableTotalMedium: 20
                 echo "Acción cuando se completa con éxito"
             }
             aborted {
@@ -251,5 +231,3 @@ pipeline {
             }
         } 
     }
-
-
