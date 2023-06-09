@@ -4,7 +4,7 @@ pipeline {
         stage('Variable1') {
             steps {
                 script {
-                    withEnv(['VARIABLE=Hola mundo']) {
+                    withEnv(['VARIABLE=Hola mundo','VARIABLE2=Adios Mundo']) {
                         sh 'printenv'
                     }     
 
