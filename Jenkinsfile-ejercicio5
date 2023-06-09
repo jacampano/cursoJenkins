@@ -11,7 +11,9 @@ Asignación del valor de las variables:
 
 En el fichero, las variables se llamarán de igual manera.
 
-Se realizará una asignación inicial, que son los valores por defecto para la ejecución del pipeline que serán sobreescritos tras la ejecución de la fase "Configuración del pipeline"
+Se realizará una asignación inicial, que son los valores por defecto para la ejecución del pipeline que serán sobreescritos tras la ejecución de la fase "Configuración del pipeline".
+
+Una de las posibles soluciones, puede ser utilizar readProperties, y para ello es necesario tener instalado  "Pipeline Utility Steps"
 
 */
 //Configuración repositorio 
