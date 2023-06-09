@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages { 
+        stage('Hola mundo') {
+            steps {
+                script {
+                    withEnv(['VARIABLE=Hola mundo']) {
+                        envVarsForTool('JDK11')
+                        sh 'printenv'
+                    }     
+
+                }
+            }
+        }
+    }
+}
