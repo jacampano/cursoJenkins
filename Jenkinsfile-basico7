@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages { 
-        stage('Hola mundo') {
+        stage('Variable1') {
             steps {
                 script {
                     withEnv(['VARIABLE=Hola mundo']) {
@@ -11,5 +11,20 @@ pipeline {
                 }
             }
         }
+        stage('Variable2') {
+            steps {
+                script {
+                    def mavenTool = 'Maven-3.8.6' // Nombre de la herramienta configurada en Jenkins
+                    def mavenHome = tool name: mavenTool, type: 'maven'
+
+                    def mavenEnv = envVarsForTool(mavenHome)
+                    // Utilizar las variables de entorno de la herramienta Maven
+                    echo "Ruta de Maven: ${mavenEnv.M2_HOME}"
+                    echo "Versión de Maven: ${mavenEnv.MVN_VERSION}"
+                    sh 'printenv'
+                }
+            }
+        }
+        
     }
 }
