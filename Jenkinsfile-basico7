@@ -5,7 +5,6 @@ pipeline {
             steps {
                 script {
                     withEnv(['VARIABLE=Hola mundo']) {
-                        envVarsForTool('JDK11')
                         sh 'printenv'
                     }     
 
