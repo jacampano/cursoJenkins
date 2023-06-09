@@ -18,6 +18,7 @@ versionMaven -> versión de Maven a utilizar
  
 
  Para este ejercicio, se utlizará el repositorio que reside en GitHub . Los goals de maven que se pasarán serán los siguientes "clean package -DskipTests".
+ Para la descarga del proyecto, puedes utilizar el step "checkout". Consulta la sintaxis en Jenkins
 */
 
 def credencialesGIT = "" 
