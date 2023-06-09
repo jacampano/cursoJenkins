@@ -59,6 +59,7 @@ pipeline {
                     def properties = readProperties file: 'ci.properties'
                     print(properties)
                     realizarCompilacion = properties['realizarCompilacion']
+                    print("Valor realizar compilación:"+realizarCompilacion)
                     analizarConSonar = properties['analizarConSonar']
                     analizarConOWASP = properties['analizarConOWASP']
                     realizarPruebasUnitarias = properties['realizarPruebasUnitarias']
