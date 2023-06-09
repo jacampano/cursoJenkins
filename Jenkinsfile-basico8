@@ -61,11 +61,18 @@ pipeline {
 
                     servidores = input(
                         id: 'multiSelectInput',
-                        message: 'Seleccione los servidores donde realizar el despliegue',
+                        message: 'Select multiple values',
                         parameters: [
-                            multiSelect(name: 'selectedValues', choices: ['tomcat1', 'tomcat2', 'tomcat3'], description: 'Selecciones los servidores')
+                            [
+                                $class: 'ExtendedChoiceParameterDefinition',
+                                name: 'selectedValues',
+                                description: 'Seleccione los servidores',
+                                multiSelectDelimiter: ',',
+                                type: 'PT_MULTI_SELECT',
+                                value: 'tomcat1,tomcat2,tomcat3'
+                            ]
                         ]
-                    )
+                    ).split(',')
 
                     // Iterar por cada servicio seleccionado
                     for (def servidor in servidores) {
