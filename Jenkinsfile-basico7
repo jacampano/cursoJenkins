@@ -15,10 +15,14 @@ pipeline {
             steps {
                 script {
                     def mavenTool = 'Maven-3.8.6' // Nombre de la herramienta configurada en Jenkins
-                    def mavenHome = tool name: mavenTool, type: 'maven'
+                    def versionJDK = 'JDK11'
+                    withEnv(["JAVA_HOME=${ tool versionJDK}"]) {
+                        withMaven(maven: mavenTool) {
+                            sh 'mvn -version'
+                        }
+                    }
                  
-                    sh 'printenv'
-                    sh 'mvn -version'
+                   
                 }
             }
         }
