@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-        stage('Me ejecuto según condición')
+        stage('Me ejecuto según condición') {
             when {
                 expression {
                     ejecutar == true
@@ -17,5 +17,6 @@ pipeline {
             steps {
                 echo 'Esta fase se ejecuta según un valor booleano'
             }
+        }
     }
 }
