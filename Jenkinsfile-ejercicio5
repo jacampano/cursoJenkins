@@ -58,7 +58,7 @@ pipeline {
                 script {
                     def properties = readProperties file: 'ci.properties'
                     print(properties)
-                    realizarCompilacion = properties['realizarCompilacion']
+                    realizarCompilacion = properties['realizarCompilacion'].toBoolean()
                     print("Valor realizar compilación:"+realizarCompilacion)
                     analizarConSonar = properties['analizarConSonar']
                     analizarConOWASP = properties['analizarConOWASP']
