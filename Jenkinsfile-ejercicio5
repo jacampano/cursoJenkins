@@ -57,6 +57,7 @@ pipeline {
             steps {
                 script {
                     def properties = readProperties file: 'ci.properties'
+                    print(properties)
                     realizarCompilacion = properties['realizarCompilacion']
                     analizarConSonar = properties['analizarConSonar']
                     analizarConOWASP = properties['analizarConOWASP']
