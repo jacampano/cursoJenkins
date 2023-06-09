@@ -1,16 +1,50 @@
+/* Ejercicio 3 .
+Se implementará un pipeline que tenga las siguientes fases (stages):
+Inicialización
+Descarga código fuente
+Compilación y empaquetado
+Pruebas de componentes, que a su vez, contendrá las siguientes fases (stages):
+    Análisis estático de código, que solo se ejecutará si la variable analizarConSonar está a "true". Adicionalmente, en caso de que se produzca error en el analisis, continuaremos con la ejecución del pipeline.
+    Umbral de calidad, que solo se ejecutará si la variable analizarConSonar está a "true". Se esperará al resultado del umbral de calidad, y en caso de no superarlo, se indicará un mensaje. Adicionalmente, en caso de que se produzca error en el analisis, continuaremos con la ejecución del pipeline.
+    Análisis de dependencias, que solo se ejecutará si la variable analizarConOWASP es "true". Obtendremos los resultados en todos los formatos posibles (--format ALL). 
+Deploy (que realizará un despliegue en un Tomcat9)
+
+Al finalizar la ejecución del pipeline, en caso de éxito, publicaremos los resultados de DependencyCheck
+
+Las fases ya están creadas. Algunas tienen ya contenido agregado para ayudarte.
+
+Indicaciones adicionales
+
+Se declararán las siguites variables:
+
+credencialesGIT -> contendrá las credenciales que se obtendrán del vault de Jenkins
+urlGIT -> URL al repositorio GIT que contendrá el proyecto a descargar y compilar
+rama -> Rama que se utilizará
+versionJDK -> versión de JDK a utilizar 
+versionMaven -> versión de Maven a utilizar
+dependencyCheckTool -> versión herramienta dependency check a utilizar 
+sonarScannerTool -> versión del scanner a utilizar 
+sonarToken -> Token de sonar
+instalacionSonar -> instalación sonar
+realizarCompilacion -> valor booleano que indicará si debe ejecutarse la compilación.
+realizarDespliegue -> valor booleano que indicará si debe ejecutarse el despliegue.
+ 
+*/
+
+
 //Configuración repositorio 
-def credencialesGIT = "Gitlab"
-def urlGIT = ""
-def rama = ""
+def credencialesGIT = "userGitH"
+def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
+def rama = "main"
 
 
 // Herramientas y servidores
 def versionJDK = "JDK11"
 def versionMaven = "Maven-3.8.6"
-def dependencyCheckTool = "DC-7.3.0"
-def sonarScannerTool = "SonarScanner"
-def sonarToken = "SonarToken"
-def instalacionSonar = "SonarLocal"
+def dependencyCheckTool = "" // Buscar/Configurar en Jenkins
+def sonarScannerTool = "" // Buscar/Configurar en Jenkins
+def sonarToken = "" // Buscar/Configurar en Jenkins
+def instalacionSonar = "" // Buscar/Configurar en Jenkins
 
 //Condiciones ejecución fases --
 def realizarCompilacion = true
@@ -18,8 +52,6 @@ def analizarConSonar = true
 def analizarConOWASP = true
 def realizarPruebasUnitarias = false
 def realizarDespliegue = true
-
-
 
 pipeline {
     
@@ -32,10 +64,13 @@ pipeline {
             steps{
 
                 cleanWs()
+                /*
+                // Si se ejecutatase a través de un webHook, podriamos obtener la información de la URL del repo y la rama de las siguientes propiedades
                 script {
                     urlGIT=env.gitlabSourceRepoHttpUrl
                     rama=env.gitlabBranch
                 }
+                */
             }
         }
 
@@ -68,7 +103,7 @@ pipeline {
 
                             echo "--- Compilación y empaquetado ---"
                             echo "JAVA_HOME: $JAVA_HOME"
-                            sh "mvn clean package"
+                            sh "mvn clean package -DskipTests"
                                        
                             }
                         }
@@ -82,7 +117,7 @@ pipeline {
         //PRUEBAS DE COMPONENTES. Ejecución de pruebas individualizadas de los componentes que conforman el producto software. Estas pruebas no deben requerir el despliegue del producto.
         stage('Pruebas de Componentes'){
             stages {
-                stage('Analisis estatico de código') {
+                stage('Analisis estático de código') {
                     when {
                         expression {
                            analizarConSonar == true
@@ -91,25 +126,7 @@ pipeline {
 
                     
                     steps {
-                       catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                       
-                        script {
-                            withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m","JAVA_HOME=${tool versionJDK}"]) {
-                                scannerHome = tool sonarScannerTool
-
-                                try {
-
-                                    withSonarQubeEnv(credentialsId: sonarToken, installationName: instalacionSonar) {
-                                    sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
-                                    }
-
-
-                                } catch (err) {
-                                    echo "Error ${err.toString()}"
-                                }
-                                }
-                            }
-                            }
+                       echo "--- Implementar análisis estático de código ---"
                     }
                
                 
@@ -126,24 +143,7 @@ pipeline {
                      }
 
                      steps {
-                        catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                            script {
-                            try {
-                                sleep(10) 
-                                timeout(time: 1, unit: 'MINUTES') {
-                                    def qg = waitForQualityGate()
-                                    if (qg.status != 'OK') {
-                                        error "${qg.status}: No se ha superado el umbral requerido de calidad "
-                                    }
-
-                                 }
-
-                                } catch (err) {
-                                    echo err.toString()
-                                    }
-                            }
-                            
-                        }
+                        echo "--- Implementar espera de los resultados del umbral de calidad ---"
                        
                     } 
 
@@ -157,13 +157,7 @@ pipeline {
                      }
 
                     steps {
-                        script {
-                            try {
-                                dependencyCheck additionalArguments: '''--format ALL''', odcInstallation: dependencyCheckTool
-                            } catch (err) {
-                                echo err.toString()
-                            }
-                        }
+                        echo "--- Implementar el analisis de las dependencias ---"
 
                     }
 
@@ -187,14 +181,7 @@ pipeline {
   
                         steps {
                                                   
-                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                                withEnv(["JAVA_HOME=${ tool versionJDK}"]) {
-                                    withMaven(maven: versionMaven){
-
-                                        sh "mvn test"
-                                    }
-                                }
-                            }
+                            echo "--- Implementar pruebas unitarias ---"
  
                         }
 
@@ -214,11 +201,12 @@ pipeline {
  
         //Aqui nueva fase que realiza el despliegue de un WAR.
         stage('Deploy') {
-            when {
+             when {
                 expression {
                 realizarDespliegue == true
                 }
             }
+            
              steps {
                     script {
                         deploy adapters: [tomcat9(credentialsId: "robot", path: '', url: "http://servidor.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
@@ -231,7 +219,7 @@ pipeline {
         
         post {
             success {
-                dependencyCheckPublisher failedNewCritical: 5, failedNewHigh: 15, failedNewLow: 30, failedNewMedium: 15, failedTotalCritical: 10, failedTotalHigh: 30, failedTotalLow: 60, failedTotalMedium: 30, pattern: '**/dependency-check-report.xml', unstableNewCritical: 3, unstableNewHigh: 5, unstableNewLow: 25, unstableNewMedium: 15, unstableTotalCritical: 5, unstableTotalHigh: 20, unstableTotalLow: 50, unstableTotalMedium: 20
+                echo "--- Implementar publicación de los resultados de dependencyCheck ---"
                 echo "Acción cuando se completa con éxito"
             }
             aborted {
