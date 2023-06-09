@@ -89,18 +89,14 @@ pipeline {
         stage('Estructuras de control (WHILE)') {
             steps {
                 script {
-                    def counter = 0
-                    def userList = []
+                     def contador = 0
 
-                    while (hudson.model.User.get(counter)) {
-                        def user = hudson.model.User.get(counter)
-                        def username = user.getId()
+                    while (contador < 5) {
+                        echo "Iteración ${contador}"
+                        // Realizar acciones dentro del bucle
 
-                        userList.add(username)  // Agregar el nombre de usuario a la lista
-                        counter++  // Incrementar el contador en cada iteración
+                        contador++  
                     }
-
-            
                 }
             }
         }
