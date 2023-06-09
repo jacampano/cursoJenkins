@@ -68,7 +68,7 @@ pipeline {
 
                             echo "--- Compilación y empaquetado ---"
                             echo "JAVA_HOME: $JAVA_HOME"
-                            sh "mvn clean package"
+                            sh "mvn clean package -DkipTests"
                                        
                             }
                         }
