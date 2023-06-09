@@ -20,15 +20,12 @@ pipeline {
         stage ('Estructuras de control (SWITCH)') {
             steps {
 
-               entorno = input {
-                    message "Indique el entorno"
-                    ok "Desplegar"
-                    parameters {
-                        string(name: 'entorno', defaultValue: 'PRODUCCION', description: 'Entorno donde se realizaran las acciones')
-                    }
-                }
-
                 script {
+                    entorno = input(
+                        message: "Indique el entorno",
+                        parameters: [string(name: 'entorno', defaultValue: 'PRODUCCION', description: 'Entorno donde se realizarán las acciones')]
+                    )
+                
                     switch (entorno) {
                         case 'PRODUCCION':
                             echo "Entorno producción"
