@@ -12,7 +12,7 @@ pipeline {
                         id: 'condicionInput',
                         message: 'Seleccione una opción',
                         parameters: [
-                            choice(name: 'condicion', choices: ['Si', 'No'], description: 'Se debe desplegar?')
+                            choice(name: 'Desplegar', choices: ['Si', 'No'], description: 'Se debe desplegar?')
                         ]
                         )
                     
