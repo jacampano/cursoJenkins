@@ -4,12 +4,45 @@ pipeline {
         stage('Estructuras de control (IF)') {
             steps {
                 script {
-                    def condicion = false.toBoolean()
+                    def condicion = true
 
                     if (condicion) {
                         echo "Ejecuto acciones cuando se cumplen"
                     } else {
                         echo "Ejecuto acciones cuando no se cumplen"
+                    }
+                }
+            }
+        }
+
+        stage ('Estructuras de control (SWITCH)') {
+            def entorno = "PRODUCCION"
+            steps {
+
+               entorno = input {
+                    message "Indique el entorno"
+                    ok "Desplegar"
+                    parameters {
+                        string(name: 'entorno', defaultValue: 'PRODUCCION', description: 'Entorno donde se realizaran las acciones')
+                    }
+                }
+
+                script {
+                    def entorno = 'PRODUCCION'
+                    switch (entorno) {
+                        case 'PRODUCCION':
+                            echo "Entorno producción"
+                        break
+                        case 'PREPRODUCCION':
+                            echo "Entorno de preproducción"
+                        break
+                        case 'DESARROLLO':
+                            echo "Entorno de desarrollo"
+                        break
+                        default:
+                            echo "Entorno no reconocido"
+                        break
+
                     }
                 }
             }
