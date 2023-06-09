@@ -1,3 +1,5 @@
+def entorno = "PRODUCCION"
+
 pipeline {
     agent any
     stages { 
@@ -16,7 +18,6 @@ pipeline {
         }
 
         stage ('Estructuras de control (SWITCH)') {
-            def entorno = "PRODUCCION"
             steps {
 
                entorno = input {
