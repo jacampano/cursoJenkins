@@ -28,7 +28,6 @@ pipeline {
                 }
 
                 script {
-                    def entorno = 'PRODUCCION'
                     switch (entorno) {
                         case 'PRODUCCION':
                             echo "Entorno producción"
