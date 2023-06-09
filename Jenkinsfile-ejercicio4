@@ -45,10 +45,12 @@ pipeline {
                
                 info()
                 cleanWs()
+                /*
                 script {
                     urlGIT=env.gitlabSourceRepoHttpUrl
                     rama=env.gitlabBranch
                 }
+                */
             }
         }
 
