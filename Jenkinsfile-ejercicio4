@@ -192,7 +192,7 @@ pipeline {
             }
              steps {
                     script {
-                        deploy adapters: [tomcat8(credentialsId: "robot", path: '', url: "http://servidor.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
+                        deploy adapters: [tomcat8(credentialsId: "robot", path: '', url: "http://lab.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
                     }
                 }
 
