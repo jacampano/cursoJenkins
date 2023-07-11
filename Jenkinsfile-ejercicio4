@@ -17,7 +17,7 @@ def instalacionSonar = "SonarLocal"
 def realizarCompilacion = true
 def analizarConSonar = true
 def analizarConOWASP = true
-def realizarPruebasUnitarias = false
+def realizarPruebasUnitarias = true
 def realizarDespliegue = true
 
 
