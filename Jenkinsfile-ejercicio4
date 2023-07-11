@@ -24,7 +24,12 @@ def realizarDespliegue = true
 
 pipeline {
     
-    agent kubernetes
+    agent {
+        kubernetes {
+            // Configura el agente de Kubernetes
+            label 'kubernetes'
+        }
+    }
           
     stages {
         // Preparación tareas previas. Ejecución de tareas previas preparatorias de la ejecución de la Tubería.        
