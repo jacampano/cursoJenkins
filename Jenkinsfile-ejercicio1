@@ -85,6 +85,14 @@ pipeline {
             always {
                 echo "--- SE EJECUTA SIEMPRE ---"
             }
+
+             unstable {
+                echo '--- Se ejecuta solo cuando el build se ha marcado como unstable'
+            }
+        changed {
+                echo '--- Se ejecuta solo cuando el build cambia de estado'
+                echo '--- Por eejemplo, si antes había falladado y en la ejecución actual termina de manera satisfactoria'
+            }
         } 
     }
 
