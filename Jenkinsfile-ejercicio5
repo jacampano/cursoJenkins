@@ -1,3 +1,21 @@
+/*Ejercicio 5
+Se implementará un pipeline similar al del ejercicio4, añadiendo una fase adicional después de la fase "Descarga de código fuente", llamada "Configuración del pipeline".
+En la fase que se va a implementar se realizarán las siguientes acciones:
+Lectura del fichero ci.properties
+Asignación del valor de las variables:
+    realizarCompilacion 
+    analizarConSonar
+    analizarConOWASP
+    realizarPruebasUnitarias 
+    realizarDespliegue
+
+En el fichero, las variables se llamarán de igual manera.
+
+Se realizará una asignación inicial, que son los valores por defecto para la ejecución del pipeline que serán sobreescritos tras la ejecución de la fase "Configuración del pipeline".
+
+Una de las posibles soluciones, puede ser utilizar readProperties, y para ello es necesario tener instalado  "Pipeline Utility Steps"
+
+*/
 //Configuración repositorio 
 def credencialesGIT = "userGitH"
 def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
@@ -17,7 +35,7 @@ def instalacionSonar = "SonarLocal"
 def realizarCompilacion = true
 def analizarConSonar = true
 def analizarConOWASP = true
-def realizarPruebasUnitarias = false
+def realizarPruebasUnitarias = true 
 def realizarDespliegue = true
 
 
@@ -46,27 +64,23 @@ pipeline {
         stage('Descarga código fuente') {
             steps {
               
-                ObtenerCodigoFuente(urlGIT,rama,credencialesGIT)
+                echo "--- Sustituir implementación utilizada hasta ahora por la llamada correspondiente en la librería ---"
+                checkout([$class: 'GitSCM',
+                       branches: [[name: "${rama}"]],
+                       doGenerateSubmoduleConfigurations: false,
+                       extensions: [], gitTool: 'git', submoduleCfg: [],
+                       userRemoteConfigs: [[credentialsId: "${credencialesGIT}", url: "${urlGIT}"]]])
               
             }
                 
   
         }
-        
+
         stage('Configuración pipeline') {
             steps {
-                script {
-                    def properties = readProperties file: 'ci.properties'
-                    print(properties)
-                    realizarCompilacion = properties['realizarCompilacion'].toBoolean()
-                    analizarConSonar = properties['analizarConSonar'].toBoolean()
-                    analizarConOWASP = properties['analizarConOWASP'].toBoolean()
-                    realizarPruebasUnitarias = properties['realizarPruebasUnitarias'].toBoolean()
-                    realizarDespliegue = properties['realizarDespliegue'].toBoolean()
-                }
+                echo "--- Implementar lectura del archivo ci.properties para realizar la configuración del pipeline y saber que fases de deben ejecutar"
             }
         }
-
         
         stage('Compilación y empaquetado') {
               when {
@@ -107,8 +121,8 @@ pipeline {
                     
                     steps {
                         catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                       
-                            AnalisisSonar(versionJDK)
+
+                            echo "--- Sustituir implementación utilizada hasta ahora por la llamada correspondiente en la librería ---"                    
                 
                         }
                 }
@@ -125,7 +139,7 @@ pipeline {
                      steps {
                         catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                             script {
-                                QualityGate()
+                                echo "--- Sustituir implementación utilizada hasta ahora por la llamada correspondiente en la librería ---"
                             }
                             
                         }
@@ -202,12 +216,12 @@ pipeline {
         stage('Deploy') {
             when {
                 expression {
-                   realizarDespliegue == true
-                }
+                    analizarConOWASP == true
+                    }
             }
              steps {
                     script {
-                        deploy adapters: [tomcat9(credentialsId: "robot", path: '', url: "http://lab.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
+                        deploy adapters: [tomcat9(credentialsId: "robot", path: '', url: "http://test.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
                     }
                 }
 
@@ -217,7 +231,7 @@ pipeline {
         
         post {
             success {
-                dependencyCheckPublisher failedNewCritical: 5, failedNewHigh: 15, failedNewLow: 30, failedNewMedium: 15, failedTotalCritical: 10, failedTotalHigh: 30, failedTotalLow: 60, failedTotalMedium: 30, pattern: '**/dependency-check-report.xml', unstableNewCritical: 3, unstableNewHigh: 5, unstableNewLow: 25, unstableNewMedium: 15, unstableTotalCritical: 5, unstableTotalHigh: 20, unstableTotalLow: 50, unstableTotalMedium: 20
+                //dependencyCheckPublisher failedNewCritical: 5, failedNewHigh: 15, failedNewLow: 30, failedNewMedium: 15, failedTotalCritical: 10, failedTotalHigh: 30, failedTotalLow: 60, failedTotalMedium: 30, pattern: '**/dependency-check-report.xml', unstableNewCritical: 3, unstableNewHigh: 5, unstableNewLow: 25, unstableNewMedium: 15, unstableTotalCritical: 5, unstableTotalHigh: 20, unstableTotalLow: 50, unstableTotalMedium: 20
                 echo "Acción cuando se completa con éxito"
             }
             aborted {
