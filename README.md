@@ -1,4 +1,4 @@
-# Curso de Jenkinsa
+# Curso de Jenkins
 
 Este repositorio contiene una serie de recursos y archivos Jenkinsfiles diseñados para enseñar y practicar el uso de Jenkins, una herramienta de automatización ampliamente utilizada en el desarrollo de software. Aquí encontrarás ejemplos de sintaxis básica, así como ejemplos más avanzados que involucran compilaciones de proyectos con Java y Maven, análisis de código con SonarQube, despliegues en servidores Tomcat, entre otros conceptos relevantes.
 
