@@ -126,7 +126,7 @@ node {
         }
     }
 
-   finally {
+   Stage('Finalizacion') {
         
          /* Posibles valores currentBuild.result
         'SUCCESS': El build se completó correctamente sin errores.
