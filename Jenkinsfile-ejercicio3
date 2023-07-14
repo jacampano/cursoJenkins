@@ -33,7 +33,7 @@ pipeline {
 
                 cleanWs()
                 /*
-                // Si se ejecutatase a través de un webHook, podriamos obtener la información de la URL del repo y la rama de las siguientes propiedades
+                // Si se ejecutatase a través de un webHook de Gitlab, podriamos obtener la información de la URL del repo y la rama de las siguientes propiedades
                 script {
                     urlGIT=env.gitlabSourceRepoHttpUrl
                     rama=env.gitlabBranch
@@ -88,35 +88,20 @@ pipeline {
                 stage('Analisis estatico de código') {
                     when {
                         expression {
-                           analizarConSonar == true
-                          }
-                     }
-
-                    
-                    steps {
-                       catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                       
-                        script {
-                            withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m","JAVA_HOME=${tool versionJDK}"]) {
-                                scannerHome = tool sonarScannerTool
-
-                                try {
-
-                                    withSonarQubeEnv(credentialsId: sonarToken, installationName: instalacionSonar) {
-                                    sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
-                                    }
-
-
-                                } catch (err) {
-                                    echo "Error ${err.toString()}"
-                                }
-                                }
-                            }
-                            }
+                            analizarConSonar == true
+                        }
                     }
-               
-                
-                }  
+                steps {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                        withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m", "JAVA_HOME=${tool 'versionJDK'}"]) {
+                            scannerHome = tool 'sonarScannerTool'
+                            withSonarQubeEnv(credentialsId: 'sonarToken', installationName: 'instalacionSonar') {
+                                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
+                            }
+                        }
+                    }
+                }
+            }  
                 
                 
 
