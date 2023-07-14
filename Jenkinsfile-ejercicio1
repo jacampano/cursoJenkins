@@ -67,7 +67,7 @@ pipeline {
             always {
                 echo "--- SE EJECUTA SIEMPRE ---"
             }
-             unstable {
+            unstable {
                 echo '--- Se ejecuta solo cuando el build se ha marcado como unstable ---'
             }
             
