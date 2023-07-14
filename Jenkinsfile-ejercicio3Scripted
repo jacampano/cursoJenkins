@@ -155,7 +155,7 @@ node {
             case 'UNSTABLE':
                 echo 'Esto se ejecuta cuando el build es inestable'
             break
-            case 'FAILURE'
+            case 'FAILURE':
                 echo 'Esto se ejecuta en caso de error'                
             break
             default :
