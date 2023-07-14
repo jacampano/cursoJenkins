@@ -95,7 +95,7 @@ pipeline {
                 steps {
                     catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                         
-                        script { // Necesario al realizar la asignación de scannerHome
+                        script { // Necesario al realizar la asignación de scannerHome y esperarQG
                             withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m", "JAVA_HOME=${tool versionJDK}"]) {
                                 scannerHome = tool sonarScannerTool
                                 withSonarQubeEnv(credentialsId: sonarToken, installationName: instalacionSonar) {
@@ -119,27 +119,23 @@ pipeline {
                      }
 
                      steps {
-                        catchError (buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                             script {
-                            try {
-                                sleep(10) 
-                                timeout(time: 1, unit: 'MINUTES') {
-                                    def qg = waitForQualityGate()
-                                    if (qg.status != 'OK') {
-                                        error "${qg.status}: No se ha superado el umbral requerido de calidad "
+                                try {
+                                    sleep(10) 
+                                    timeout(time: 1, unit: 'MINUTES') {
+                                        def qg = waitForQualityGate()
+                                        if (qg.status != 'OK') {
+                                            error "${qg.status}: No se ha superado el umbral requerido de calidad "
+                                        }
+
                                     }
 
-                                 }
-
-                                } catch (err) {
-                                    echo err.toString()
+                                    } catch (err) {
+                                        echo err.toString()
+                                        currentBuild.result = 'UNSTABLE'
                                     }
                             }
-                            
-                        }
-                       
-                    } 
-
+                        } 
                 }
 
                 stage('Analisis de dependencias') {
