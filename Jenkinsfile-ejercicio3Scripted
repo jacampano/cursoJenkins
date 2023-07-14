@@ -95,22 +95,28 @@ node {
                     dependencyCheck additionalArguments: '''--format ALL''', odcInstallation: dependencyCheckTool
                 } catch (err) {
                     echo err.toString()
+                    currentBuild.result = 'UNSTABLE'
                 }
             }
         }
 
         if (realizarPruebasUnitarias) {
             stage('Ejecución pruebas unitarias') {
-                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
-                    withEnv(["JAVA_HOME=${versionJDK}"]) {
-                        withMaven(maven: versionMaven) {
-                            sh "mvn test"
+                try {
+                    withMaven(
+                        maven: versionMaven,
+                        jdk: versionJDK
+                    ){
+                        sh 'mvn clean test'
                         }
-                    }
+                } catch (err) {
+                    echo err.toString()
+                    currentBuild.result = 'UNSTABLE'
                 }
+           
             }
         }
-    }
+    } // Cierre fase "Pruebas de componentes"
 
     stage('Deploy') {
         if (realizarDespliegue) {
