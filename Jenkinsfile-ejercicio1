@@ -41,7 +41,7 @@ pipeline {
                 JAVA_HOME = "${tool 'versionJDK'}"
             }
             steps {
-                withMaven(maven: 'versionMaven', jdk: 'versionJDK') {
+                withMaven(maven: versionMaven, jdk: JAVA_HOME) {
                     echo "--- Compilación y empaquetado ---"
                     sh "mvn clean package -DskipTests"
                 }
