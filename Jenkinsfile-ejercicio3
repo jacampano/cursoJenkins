@@ -95,10 +95,10 @@ pipeline {
                     catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                         
                         script { // Necesario al realizar la asignación de scannerHome
-                        withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m", "JAVA_HOME=${tool 'versionJDK'}"]) {
-                            scannerHome = tool 'sonarScannerTool'
-                            withSonarQubeEnv(credentialsId: 'sonarToken', installationName: 'instalacionSonar') {
-                                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
+                            withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m", "JAVA_HOME=${tool 'versionJDK'}"]) {
+                                scannerHome = tool sonarScannerTool
+                                withSonarQubeEnv(credentialsId: 'sonarToken', installationName: 'instalacionSonar') {
+                                    sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
                                 }
                             }
                         }
