@@ -55,7 +55,7 @@ node {
         if (analizarConSonar) {
         stage('Analisis con Sonar') {
             try {
-                withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m", "JAVA_HOME=${versionJDK}"]) {
+                withEnv(["SONAR_SCANNER_OPTS=-Xms512m -Xmx1024m", "JAVA_HOME=${tool versionJDK}"]) {
                     def scannerHome = tool sonarScannerTool
                     withSonarQubeEnv(credentialsId: sonarToken, installationName: instalacionSonar) {
                         sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${WORKSPACE}/sonar.properties"
