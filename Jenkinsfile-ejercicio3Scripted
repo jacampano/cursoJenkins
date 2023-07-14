@@ -62,6 +62,7 @@ node {
                     }
                 }
             } catch (err) {
+                echo "--- EXCEPCION EN ${env.STAGE_NAME}"
                 echo "Error: ${err.toString()}"
                 currentBuild.result = 'UNSTABLE'
             }
@@ -80,6 +81,7 @@ node {
                             }
                         }
                     } catch (err) {
+                        echo "--- EXCEPCION EN ${env.STAGE_NAME}"
                         echo err.toString()
                         currentBuild.result = 'UNSTABLE'
                     }
@@ -92,6 +94,7 @@ node {
                 try {
                     dependencyCheck additionalArguments: '''--format ALL''', odcInstallation: dependencyCheckTool
                 } catch (err) {
+                    echo "--- EXCEPCION EN ${env.STAGE_NAME}"
                     echo err.toString()
                     currentBuild.result = 'UNSTABLE'
                 }
@@ -123,19 +126,35 @@ node {
         }
     }
 
-    post {
-        success {
-            dependencyCheckPublisher failedNewCritical: 5, failedNewHigh: 15, failedNewLow: 30, failedNewMedium: 15, failedTotalCritical: 10, failedTotalHigh: 30, failedTotalLow: 60, failedTotalMedium: 30, pattern: '**/dependency-check-report.xml', unstableNewCritical: 3, unstableNewHigh: 5, unstableNewLow: 25, unstableNewMedium: 15, unstableTotalCritical: 5, unstableTotalHigh: 20, unstableTotalLow: 50, unstableTotalMedium: 20
-            echo "Acción cuando se completa con éxito"
+   finally {
+        
+         /* Posibles valores currentBuild.result
+        'SUCCESS': El build se completó correctamente sin errores.
+        'UNSTABLE': El build se completó, pero algunas pruebas o verificaciones no pasaron o hubo problemas menores.
+        'FAILURE': El build falló debido a errores en la compilación, pruebas o verificaciones.
+        'ABORTED': El build se abortó manualmente antes de su finalización.
+        'NOT_BUILT': El build no se ejecutó debido a ciertas condiciones o configuraciones.
+        */
+        
+        def currentResult = currentBuild.result ?: 'SUCCESS'
+        if (currentResult == 'UNSTABLE') {
+            echo 'Esto se ejecuta cuando el build es inestable'
         }
-        aborted {
-            echo "--- Acciones cuando se aborta ---"
+
+        def previousResult = currentBuild.getPreviousBuild()?.result
+        if (previousResult != null && previousResult != currentResult) {
+            echo '--- Se ejecuta solo cuando el build cambia de estado ---'
+            echo '--- Por ejemplo, si antes había falladado y en la ejecución actual termina de manera satisfactoria ---'
         }
-        failure {
-            echo "-- Acciones cuando se falla ---"
-        }
-        always {
-            echo "--- SE EJECUTA SIEMPRE ---"
-        }
+
+        echo '--- SE EJECUTA SIEMPRE ---'
+        'SUCCESS': El build se completó correctamente sin errores.
+        'UNSTABLE': El build se completó, pero algunas pruebas o verificaciones no pasaron o hubo problemas menores.
+        'FAILURE': El build falló debido a errores en la compilación, pruebas o verificaciones.
+        'ABORTED': El build se abortó manualmente antes de su finalización.
+        'NOT_BUILT': El build no se ejecutó debido a ciertas condiciones o configuraciones.
+
+
     }
 }
+
