@@ -36,6 +36,22 @@ pipeline {
                 cleanWs()
                 
                 script {
+                    
+                    def causeAction = currentBuild.rawBuild.getAction(jenkins.model.CauseAction)
+                    if (causeAction != null) {
+                        def cause = causeAction.getCauses()[0]
+                        if (cause instanceof hudson.triggers.SCMTrigger.SCMTriggerCause) {
+                            echo 'El Job se ha disparado a través de un webhook.'
+                            // Realizar acciones específicas para webhook
+                        } else {
+                            echo 'El Job se ha disparado de otra forma.'
+                            // Realizar acciones para otros disparadores
+                        }
+                    } else {
+                        echo 'No se pudo determinar la causa del disparo del Job.'
+                    }
+
+
                     if (env.BUILD_CAUSE == 'SCMTrigger') {
                         echo 'El Job se ha disparado a través de un webhook.'
                         urlGIT=env.GIT_URL
