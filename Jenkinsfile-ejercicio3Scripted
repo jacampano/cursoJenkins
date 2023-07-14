@@ -107,7 +107,7 @@ node {
                         maven: versionMaven,
                         jdk: versionJDK
                     ){
-                        sh 'mvn clean test'
+                        sh 'mvn test'
                         }
                 } catch (err) {
                     echo err.toString()
