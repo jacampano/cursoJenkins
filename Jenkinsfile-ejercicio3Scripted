@@ -114,7 +114,7 @@ node {
                     echo "--- EXCEPCION EN ${env.STAGE_NAME}"
                     echo err.toString()
                     if (fallarPipelineError) {
-                        currentBuild.result ="FAILURE"
+                        currentBuild.result ="ABORTED"
                     } else {
                         currentBuild.result = 'UNSTABLE'
                     }
