@@ -138,16 +138,6 @@ node {
         
         def currentResult = currentBuild.result
 
-         if (currentResult == 'SUCCESS') {
-            echo 'Esto se ejecuta cuando el build se ejecuta sin problemas'
-        }
-
-        if (currentResult == 'UNSTABLE') {
-            echo 'Esto se ejecuta cuando el build es inestable'
-        }
-
-        //o bien
-
         switch(currentResult) {
             case 'SUCCESS':
                 echo 'Esto se ejecuta cuando el build se ejecuta sin problemas'
