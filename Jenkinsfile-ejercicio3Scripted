@@ -148,13 +148,7 @@ node {
         }
 
         echo '--- SE EJECUTA SIEMPRE ---'
-        'SUCCESS': El build se completó correctamente sin errores.
-        'UNSTABLE': El build se completó, pero algunas pruebas o verificaciones no pasaron o hubo problemas menores.
-        'FAILURE': El build falló debido a errores en la compilación, pruebas o verificaciones.
-        'ABORTED': El build se abortó manualmente antes de su finalización.
-        'NOT_BUILT': El build no se ejecutó debido a ciertas condiciones o configuraciones.
-
-
+      
     }
 }
 
