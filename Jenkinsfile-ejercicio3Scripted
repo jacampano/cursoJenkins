@@ -136,10 +136,33 @@ node {
         'NOT_BUILT': El build no se ejecutó debido a ciertas condiciones o configuraciones.
         */
         
-        def currentResult = currentBuild.result ?: 'SUCCESS'
+        def currentResult = currentBuild.result
+
+         if (currentResult == 'SUCCESS') {
+            echo 'Esto se ejecuta cuando el build se ejecuta sin problemas'
+        }
+
         if (currentResult == 'UNSTABLE') {
             echo 'Esto se ejecuta cuando el build es inestable'
         }
+
+        //o bien
+
+        switch(currentResult) {
+            case 'SUCCESS':
+                echo 'Esto se ejecuta cuando el build se ejecuta sin problemas'
+            break
+            case 'UNSTABLE':
+                echo 'Esto se ejecuta cuando el build es inestable'
+            break
+            case 'FAILURE'
+                echo 'Esto se ejecuta en caso de error'                
+            break
+            default :
+                echo "Ninguno de los anteriores"
+        }
+
+
 
         def previousResult = currentBuild.getPreviousBuild()?.result
         if (previousResult != null && previousResult != currentResult) {
