@@ -41,7 +41,7 @@ pipeline {
                 JAVA_HOME = "${tool 'versionJDK'}"
             }
             steps {
-                withMaven(maven: versionMaven, jdk: JAVA_HOME) {
+                withMaven(maven: versionMaven, jdk: versionJDK) {
                     echo "--- Compilación y empaquetado ---"
                     sh "mvn clean package -DskipTests"
                 }
@@ -76,7 +76,7 @@ pipeline {
             
             changed {
                 echo '--- Se ejecuta solo cuando el build cambia de estado ---'
-                echo '--- Por eejemplo, si antes había falladado y en la ejecución actual termina de manera satisfactoria ---'
+                echo '--- Por ejemplo, si antes había falladado y en la ejecución actual termina de manera satisfactoria ---'
             }
         } 
     }
