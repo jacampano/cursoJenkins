@@ -71,7 +71,6 @@ node {
 
         if (esperarQG) {
             stage('Umbral de Calidad') {
-                if (esperarQG) {
                     try {
                         sleep(10) 
                         timeout(time: 1, unit: 'MINUTES') {
@@ -87,7 +86,6 @@ node {
                     }
                 }
             }
-        }
 
         if (analizarConOWASP) {
             stage('Análisis de dependencias') {
