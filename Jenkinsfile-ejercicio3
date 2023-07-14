@@ -121,7 +121,7 @@ pipeline {
                      steps {
                             script {
                                 try {
-                                    sleep(10) 
+                                    sleep(2) 
                                     timeout(time: 1, unit: 'MINUTES') {
                                         def qg = waitForQualityGate()
                                         if (qg.status != 'OK') {
