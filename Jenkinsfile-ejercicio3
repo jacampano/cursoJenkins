@@ -10,7 +10,7 @@ def versionMaven = "Maven-3.8.6"
 def dependencyCheckTool = "DC-7.3.0"
 def sonarScannerTool = "SonarScanner"
 def sonarToken = "SonarToken"
-def instalacionSonar = "SonarLocal"
+def instalacionSonar = "SonarLab"
 
 //Condiciones ejecución fases --
 def realizarCompilacion = true
