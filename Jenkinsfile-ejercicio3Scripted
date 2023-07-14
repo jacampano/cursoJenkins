@@ -1,6 +1,6 @@
 //Configuración repositorio 
 def credencialesGIT = "userGitH"
-def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
+def urlGIT = "https://github.com/jacampano/pruebasWebApp"
 def rama = "main"
 
 // Herramientas y servidores
