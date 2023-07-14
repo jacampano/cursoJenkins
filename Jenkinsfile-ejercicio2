@@ -47,21 +47,11 @@ pipeline {
                 }
             }
           
-                steps {
-                    script {
-                        
-                        withEnv(["JAVA_HOME=${ tool versionJDK}"]) {
-                            withMaven(maven: versionMaven) {
-
-                            echo "--- Compilación y empaquetado ---"
-                            echo "JAVA_HOME: $JAVA_HOME"
-                            sh "mvn clean package -DskipTests"
-                                       
-                            }
-                        }
-         
+             steps {
+                withMaven(maven: versionMaven, jdk: versionJDK) {
+                    echo "--- Compilación y empaquetado ---"
+                    sh "mvn clean package -DskipTests"
                     }
-                 
                 }
             }
         
