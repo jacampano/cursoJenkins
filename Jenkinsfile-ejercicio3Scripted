@@ -42,11 +42,16 @@ node {
 
     stage('Compilación y empaquetado') {
         if (realizarCompilacion) {
-            withEnv(["JAVA_HOME=${tool versionJDK}", "MAVEN_HOME=${tool versionMaven}"]) {
+           withMaven(
+             maven: versionMaven,
+             jdk: versionJDK
+
+           ) {
                     echo "--- Compilación y empaquetado ---"
                     echo "JAVA_HOME: $JAVA_HOME"
                     sh "mvn clean package -DskipTests"
-            }
+           }
+            
         }
     }
 
