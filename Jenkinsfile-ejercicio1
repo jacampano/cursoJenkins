@@ -37,9 +37,6 @@ pipeline {
         }
         // Compilación y empaquetado
         stage('Compilación y empaquetado') {
-            environment {
-                JAVA_HOME = "${tool 'versionJDK'}"
-            }
             steps {
                 withMaven(maven: versionMaven, jdk: versionJDK) {
                     echo "--- Compilación y empaquetado ---"
