@@ -1,7 +1,3 @@
-import jenkins.model.CauseAction
-import hudson.triggers.SCMTrigger.SCMTriggerCause
-
-
 //Configuración repositorio 
 def credencialesGIT = "userGitH"
 def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
