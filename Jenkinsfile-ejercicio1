@@ -36,7 +36,7 @@ pipeline {
   
         }
         // Compilación y empaquetado
-        sstage('Compilación y empaquetado') {
+        stage('Compilación y empaquetado') {
             environment {
                 JAVA_HOME = "${tool 'versionJDK'}"
             }
