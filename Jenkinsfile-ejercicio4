@@ -34,12 +34,20 @@ pipeline {
                
                 info()
                 cleanWs()
-                /*
+                
                 script {
-                    urlGIT=env.gitlabSourceRepoHttpUrl
-                    rama=env.gitlabBranch
+                    if (env.BUILD_CAUSE == 'SCMTrigger') {
+                        echo 'El Job se ha disparado a través de un webhook.'
+                        urlGIT=env.GIT_URL
+                        rama=env.GIT_BRANCH
+                        // Realizar acciones específicas para webhook
+                    } else {
+                        echo 'El Job se ha disparado de otra forma.'
+                        // Realizar acciones para otros disparadores
+                    }
+                    
                 }
-                */
+                
             }
         }
 
