@@ -120,9 +120,7 @@ node {
 
     stage('Deploy') {
         if (realizarDespliegue) {
-            script {
                 deploy adapters: [tomcat9(credentialsId: "robot", path: '', url: "http://lab.tomcat:8080/")], contextPath: "/pruebasWebApp", war: "**/*.war"
-            }
         }
     }
 
