@@ -1,6 +1,6 @@
 //Configuración repositorio 
 def credencialesGIT = "userGitH"
-def urlGIT = "https://github.com/jacampano/pruebasWebApp"
+def urlGIT = "https://github.com/jacampano/pruebasWebApp.git"
 def rama = "main"
 
 // Herramientas y servidores
@@ -33,7 +33,8 @@ node {
 
     stage('Descarga código fuente') {
         echo "--- Obtener Codigo Fuente desde rama: ${rama} --"
-         git url: urlGIT
+         git branch: rama,
+             url: urlGIT
     }
 
     stage('Compilación y empaquetado') {
