@@ -13,7 +13,7 @@ def sonarToken = "SonarToken"
 def instalacionSonar = "SonarLocal"
 
 //Condiciones ejecución fases --
-@Library('eslabones@main')
+@Library('eslabones@test')
 def realizarCompilacion = true
 def analizarConSonar = true
 def analizarConOWASP = true
